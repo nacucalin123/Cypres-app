@@ -1,44 +1,78 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#1a2744">
-<link rel="manifest" href="manifest.json">
 <title>Cypres Marketplace</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f6f6f6;padding-bottom:85px}
-.head{background:white;display:flex;justify-content:space-between;align-items:center;padding:14px 12px;font-weight:900;font-size:17px;position:sticky;top:0;z-index:10;border-bottom:1px solid #eee}
-.logo{display:flex;align-items:center;gap:8px}.logo b{letter-spacing:1px}
+body{margin:0;font-family:Arial;background:#f6f6f6;padding-bottom:80px}
+.head{background:white;padding:14px;font-weight:900;display:flex;justify-content:space-between;border-bottom:1px solid #eee}
 .filters{background:#1a2744;color:white;padding:10px;display:flex;gap:8px;overflow:auto}
-.chip{border:1.5px solid #ffffffaa;border-radius:22px;padding:7px 14px;white-space:nowrap;cursor:pointer;opacity:.7;font-size:14px}.chip.active{opacity:1;background:white;color:#1a2744;font-weight:bold}
-.bono{margin:12px;background:#27ae60;color:white;border-radius:22px;padding:8px 14px;display:inline-flex;gap:6px;align-items:center;font-weight:bold;font-size:14px}
-.card{background:white;margin:10px;border-radius:14px;padding:14px;box-shadow:0 3px 10px #0001;position:relative;min-height:110px}
-.go{background:#1a2744;color:white;width:68px;height:68px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;float:right;font-weight:900;cursor:pointer;line-height:1}
-.price{background:#27ae60;color:white;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:14px}
-.dist{background:#dbeafe;padding:6px 12px;border-radius:20px;margin-left:6px;font-size:14px}
-.bottom{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;border-top:1px solid #ddd;padding:10px 0;z-index:20}
-.bottom div{font-size:11px;text-align:center;color:#888;line-height:1.2}
-.bottom .active{color:#1a2744;font-weight:900}
-.config{background:white;margin:10px;border-radius:14px;padding:14px}
-.row{display:flex;align-items:center;gap:14px;margin:12px 0}
-.circle{width:38px;height:38px;border:2px solid #1a2744;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
+.chip{border:1px solid white;border-radius:20px;padding:7px 14px;white-space:nowrap;opacity:0.7}.chip.active{opacity:1;background:white;color:#1a2744;font-weight:bold}
+.card{background:white;margin:10px;border-radius:12px;padding:12px;box-shadow:0 2px 6px #0001}
+.go{background:#1a2744;color:white;width:65px;height:65px;border-radius:50%;float:right;display:flex;align-items:center;justify-content:center;font-weight:900}
+.price{color:white;padding:5px 12px;border-radius:20px;font-weight:bold}
+.config{background:white;margin:10px;border-radius:12px;padding:12px}
+.row{display:flex;gap:12px;align-items:center}
+.circle{width:36px;height:36px;border:2px solid #1a2744;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.bottom{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #ddd}
 </style>
 </head>
 <body>
-<div class="head"><div class="logo">🟦 <b>CYPRES MARKETPLACE</b></div><span style="color:#27ae60;font-size:12px">● Conectado</span></div>
-<div class="filters" id="filters"></div>
-<div class="bono">💧 Bono por lluvia ACTIVO</div>
+<div class="head"><span>CYPRES MARKETPLACE</span><span style="color:green;font-size:12px">● Conectado</span></div>
+<div class="filters">
+<div class="chip active" id="c0">0-1 km: <span id="v0">7</span>€</div>
+<div class="chip" id="c1">1-2 km: <span id="v1">8</span>€</div>
+<div class="chip" id="c2">2-3 km: <span id="v2">9</span>€</div>
+</div>
+
 <div id="list"></div>
 
 <div class="config">
-<p style="background:#e3f2fd;padding:12px;border-radius:8px;color:#1565c0;font-weight:bold;text-align:center">Configuración Cypres</p>
-<div id="settings"></div>
+<b style="color:#1565c0">Tus precios - AQUI se cambian</b>
+<p>0-1 km</p><div class="row"><div class="circle" onclick="change(0,-1)">-</div><h2 id="p0">7 €</h2><div class="circle" onclick="change(0,1)">+</div></div>
+<p>1-2 km</p><div class="row"><div class="circle" onclick="change(1,-1)">-</div><h2 id="p1">8 €</h2><div class="circle" onclick="change(1,1)">+</div></div>
+<p>2-3 km</p><div class="row"><div class="circle" onclick="change(2,-1)">-</div><h2 id="p2">9 €</h2><div class="circle" onclick="change(2,1)">+</div></div>
+<p>€/km extra</p><div class="row"><div class="circle" onclick="change(3,-0.1)">-</div><h2 id="p3">0.8 €</h2><div class="circle" onclick="change(3,0.1)">+</div></div>
 </div>
 
-<div class="bottom">
-<div onclick="location.href='index.html'" class="active">🏠<br>Marketplace</div><div>🔥<br>Mis Capturas</div><div>📊<br>Resumen</div><div onclick="location.href='profil.html'">👤<br>Cuenta</div>
-</div>
+<div class="bottom"><div><b>🏠 Marketplace</b></div><div>👤 Cuenta</div></div>
 
 <script>
-let cfg = JSON.parse(localStorage.getItem('cypres_cfg')||'{"0
-                     
+let prices = [7,8,9,0.8];
+function change(i,d){
+ prices[i]=parseFloat((prices[i]+d).toFixed(1));
+ if(prices[i]<0.1) prices[i]=0.1;
+ document.getElementById('p'+i).innerText = prices[i]+' €';
+ if(i<3){
+   document.getElementById('v'+i).innerText = prices[i];
+   document.getElementById('p'+i).style.color='green';
+   setTimeout(()=>document.getElementById('p'+i).style.color='black',300);
+ }
+ localStorage.setItem('cypres_prices',JSON.stringify(prices));
+ render();
+}
+function render(){
+ let list = document.getElementById('list');
+ let html='';
+ // Aici calculam pretul real in functie de ce ai setat tu
+ let pedidos = [
+   {name:'PIZZERÍA CARLOS VALENCIA I', dist:0.7, km:1.2},
+   {name:'BURGER KING CENTRO', dist:1.4, km:2.5},
+   {name:'MCDONALDS HUELIN - MALAGA', dist:2.2, km:4.9},
+ ];
+ pedidos.forEach(p=>{
+   let base = p.dist<1?prices[0]:p.dist<2?prices[1]:prices[2];
+   let total = (base + p.km*prices[3]).toFixed(2);
+   let color = total>=7?'#27ae60':'#e74c3c';
+   html+=`<div class="card"><div class="go">GO!</div><b>${p.name}</b><br><small>a ${p.dist}km de ti - ${p.km} km entrega</small><br><br><span class="price" style="background:${color}">${total}€</span><br><br><small>Tu precio minimo: ${base}€ + ${prices[3]}€/km</small></div>`;
+ });
+ list.innerHTML=html;
+}
+// incarca salvate
+let saved = localStorage.getItem('cypres_prices');
+if(saved){prices=JSON.parse(saved); for(let i=0;i<4;i++)document.getElementById('p'+i).innerText=prices[i]+' €'; for(let i=0;i<3;i++)document.getElementById('v'+i).innerText=prices[i];}
+render();
+</script>
+</body>
+</html>
