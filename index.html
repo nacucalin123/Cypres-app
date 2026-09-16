@@ -1,1 +1,87 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CYPRES VALENCIA</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><style>*{margin:0;box-sizing:border-box}body{font-family:sans-serif;background:#111;color:#fff}#map{height:50vh}header{background:#0f3d2e;padding:12px;display:flex;justify-content:space-between;position:sticky;top:0;z-index:999}.order{background:#222;margin:8px;border-radius:14px;padding:12px;border-left:4px solid #ffcc00}.btn{flex:1;padding:11px;border-radius:10px;border:0;font-weight:900}.green{background:#25D366;color:#fff}.dark{background:#444;color:#fff}.row{display:flex;gap:6px;margin-top:8px}.test{background:#ffcc00;color:#000;text-align:center;padding:14px;font-weight:900;position:fixed;bottom:0;left:0;right:0}</style></head><body><header><b>CYPRES VALENCIA 🛵</b><span style="color:#25D366">● ONLINE</span></header><div id="map"></div><div id="list"></div><div class="test" onclick="newOrder()">🔔 TEST SUNET UBER - APASA</div><script>let orders=[{id:1023,client:"Mihai - Colon 12",addr:"Carrer Colon 12, Valencia",lat:39.4699,lng:-0.3763,total:"18€",status:"new"},{id:1024,client:"Ana - Puerto 45",addr:"Av del Puerto 45",lat:39.466,lng:-0.355,total:"15€",status:"new"}];let map=L.map('map').setView([39.4699,-0.3763],14);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);let m={};function play(){try{let c=new(window.AudioContext||window.webkitAudioContext)();let t=c.currentTime;for(let i=0;i<3;i++){let o=c.createOscillator();let g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=i%2==0?880:1320;g.gain.setValueAtTime(1,t+i*0.25);g.gain.exponentialRampToValueAtTime(0.01,t+i*0.25+0.2);o.start(t+i*0.25);o.stop(t+i*0.25+0.3)}navigator.vibrate&&navigator.vibrate([200,100,200,100,400])}catch(e){}}function render(){let h="";orders.forEach(o=>{if(!m[o.id])m[o.id]=L.marker([o.lat,o.lng]).addTo(map).bindPopup(o.addr);let n=o.status=="new";h+=`<div class="order" onclick="map.setView([${o.lat},${o.lng}],16)"><b>#${o.id} ${o.total} ${n?"🟡 NOUA":"🟢 CURS"}</b><div style="font-size:11px;color:#aaa">${o.addr}</div><div class="row">${n?`<button class="btn dark" onclick="orders=orders.filter(x=>x.id!=${o.id});render()">X</button><button class="btn green" onclick="orders.find(x=>x.id==${o.id}).status='picked';render()">ACCEPTA</button>`:`<button class="btn dark" onclick="window.open('https://waze.com/ul?ll=${o.lat},${o.lng}&navigate=yes')">WAZE</button><button class="btn green" onclick="map.removeLayer(m[${o.id}]);orders=orders.filter(x=>x.id!=${o.id});render()">LIVRAT</button>`}</div></div>`});document.getElementById('list').innerHTML=h}function newOrder(){let id=Math.floor(Math.random()*9000);orders.unshift({id:id,client:"Client Nou",addr:"Plaza Ayuntamiento",lat:39.4696,lng:-0.3766,total:"19€",status:"new"});render();play()}render()</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cypres App</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+header{background:#000;color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+header b{font-size:20px}
+.avatar{width:38px;height:38px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer}
+#map{height:45vh;width:100%}
+.card{background:#fff;margin:12px;border-radius:14px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.btn{width:100%;padding:14px;border:0;border-radius:10px;font-weight:bold;margin-top:10px}
+.green{background:#000;color:#fff}
+input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:6px 0 12px}
+label{font-size:11px;font-weight:bold;color:#666}
+/* PANOU PROFIL CA LA UBER - NU MAI DISPARE */
+#profilePanel{position:fixed;top:0;right:-100%;width:100%;max-width:380px;height:100%;background:#f5f5f5;z-index:9999;transition:.3s;overflow-y:auto}
+#profilePanel.open{right:0}
+#overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);display:none;z-index:9998}
+#overlay.show{display:block}
+</style>
+</head>
+<body>
+
+<header><b>CYPRES</b><div class="avatar" id="avTop" onclick="openProfile()">C</div></header>
+
+<div id="map"></div>
+
+<div class="card">
+<b>📍 COMANDĂ NOUĂ</b>
+<p id="status" style="margin-top:8px;color:green">Ești ONLINE • Valencia</p>
+<button class="btn green" onclick="alert('Cauți comenzi...')">CAUTĂ COMENZI</button>
+</div>
+
+<div class="card"><b>📊 STATISTICI AZI</b><p style="margin-top:10px">Curse: 0 | Câștig: 0€</p></div>
+
+<!-- FUNDAL NEGRU -->
+<div id="overlay" onclick="closeProfile()"></div>
+
+<!-- PROFILUL - CA LA UBER, SE DESCHIDE PESTE HARTA -->
+<div id="profilePanel">
+<header><a onclick="closeProfile()" style="color:#fff;text-decoration:none;cursor:pointer">← ÎNAPOI</a><b>PROFIL</b></header>
+
+<div class="card" style="text-align:center">
+<div class="avatar" id="av" style="width:70px;height:70px;margin:0 auto;font-size:30px" onclick="document.getElementById('file').click()">C</div>
+<input type="file" id="file" hidden accept="image/*">
+<h2 id="numeView" style="margin-top:10px">Nume Curier</h2>
+<p style="color:green">● Online</p>
+</div>
+
+<div class="card">
+<label>NUME COMPLET</label><input id="nume" placeholder="Ex: Călin Nacu">
+<label>TELEFON</label><input id="tel" placeholder="+34...">
+<label>VEHICUL</label><select id="veh"><option>MOTOR</option><option>BICICLETA</option><option>MASINA</option><option>PE JOS</option></select>
+<label>ZONA VALENCIA</label><select id="zona"><option>BENIMACLET</option><option>CENTRO</option><option>RUZAFA</option><option>CAMINS</option><option>TOATA VALENCIA</option></select>
+<label>NUMAR INMATRICULARE</label><input id="numar" placeholder="Ex: 1234 ABC">
+<button class="btn green" onclick="save();closeProfile()">SALVEAZĂ ȘI ÎNCHIDE</button>
+</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// HARTA
+var map = L.map('map').setView([39.4699,-0.3763],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+// PROFIL CA LA UBER
+function openProfile(){document.getElementById('profilePanel').classList.add('open');document.getElementById('overlay').classList.add('show')}
+function closeProfile(){document.getElementById('profilePanel').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
+function save(){
+localStorage.setItem('nume',document.getElementById('nume').value);
+localStorage.setItem('tel',document.getElementById('tel').value);
+document.getElementById('numeView').innerText=document.getElementById('nume').value||'Nume Curier';
+document.getElementById('avTop').innerText=(document.getElementById('nume').value||'C')[0];
+document.getElementById('av').innerText=(document.getElementById('nume').value||'C')[0];
+alert('Salvat!');
+}
+// incarca date salvate
+window.onload=()=>{
+let n=localStorage.getItem('nume');
+if(n){document.getElementById('nume').value=n;document.getElementById('numeView').innerText=n;document.getElementById('avTop').innerText=n[0];document.getElementById('av').innerText=n[0];}
+}
+</script>
+</body>
+</html>
