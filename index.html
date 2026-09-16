@@ -4,4 +4,60 @@ function k(){return new Date().toISOString().slice(0,10)}function r(){let d=JSON
 function gen(){let L=[['Benimaclet','Ruzafa',2.1],['Centro','Malvarrosa',4.2]];let l=L[Math.random()*2|0];P=+(5+Math.random()*6).toFixed(1);p.textContent=P+'€';f.textContent=l[0];g.textContent=l[1];d.textContent=l[2]+'km Net '+(P*.8).toFixed(1)+'€';o.classList.add('s');b()}
 function acc(){o.classList.remove('s');let c=k(),d=JSON.parse(localStorage.d||'{}');if(!d[c])d[c]={e:0,n:0};d[c].e+=P;d[c].n+=1;localStorage.d=JSON.stringify(d);r()}
 r();setTimeout(gen,1000)
+</script><!DOCTYPE html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profil Curier - UBER</title><style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,sans-serif;background:#f6f6f6;color:#000}
+.top{background:#000;color:#fff;padding:20px 16px 30px;border-radius:0 0 20px 20px}
+.row{display:flex;align-items:center;gap:14px}
+.ava{width:72px;height:72px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}
+.name{font-size:20px;font-weight:700}.rate{background:#fff;color:#000;padding:3px 8px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;gap:4px;margin-top:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:-18px 16px}
+.card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 12px #0001}
+.card b{font-size:18px;display:block}.card span{font-size:11px;color:#666}
+.list{margin:0 16px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0001}
+.it{display:flex;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #eee;font-size:14px}
+.it:last-child{border:0}.it small{color:#666}
+.btn{margin:16px;background:#000;color:#fff;padding:14px;border:0;border-radius:10px;width:calc(100% - 32px);font-size:15px;font-weight:700}
+.badge{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;color:#fff}
+.g{background:#00d26a}.y{background:#ffb800}.b{background:#000}
+</style>
+
+<div class="top">
+<div class="row">
+<div class="ava">C</div>
+<div>
+<div class="name">Calin Nacu</div>
+<div class="rate">⭐ 4.96 • 1,248 curse</div>
+</div>
+</div>
+</div>
+
+<div class="grid">
+<div class="card"><b id="earn">0€</b><span>Net azi</span></div>
+<div class="card"><b id="perh">0€/h</b><span>€/oră</span></div>
+<div class="card"><b id="curs">0</b><span>Curse</span></div>
+</div>
+
+<div class="list">
+<div class="it"><span>💰 Brut azi</span><b id="brut">0€</b></div>
+<div class="it"><span>📉 Comision UBER 20%</span><small id="com">-0€</small></div>
+<div class="it"><span>✅ Rată acceptare</span><span><span class="badge g">98%</span></span></div>
+<div class="it"><span>⏱️ Timp online</span><b id="time">0h 0m</b></div>
+<div class="it"><span>🏆 Nivel</span><span><span class="badge b">DIAMANT</span></span></div>
+<div class="it"><span>📦 Tip cont</span><span><span class="badge y">UBER PRO</span></span></div>
+</div>
+
+<button class="btn" onclick="location.href='index.html'">⬅️ INAPOI LA HARTA</button>
+
+<script>
+function k(){return new Date().toISOString().slice(0,10)}
+let d=JSON.parse(localStorage.d||'{}'),c=d[k()]||{e:0,n:0};
+let h=(Date.now()-(+localStorage.a||Date.now()))/36e5||0.1;
+let brut=c.e, net=brut*0.8;
+document.getElementById('brut').textContent=brut.toFixed(1)+'€';
+document.getElementById('earn').textContent=net.toFixed(1)+'€';
+document.getElementById('com').textContent='-'+(brut*0.2).toFixed(1)+'€';
+document.getElementById('curs').textContent=c.n;
+document.getElementById('perh').textContent=(net/(h||0.1)).toFixed(1)+'€/h';
+document.getElementById('time').textContent=Math.floor(h)+'h '+Math.floor((h%1)*60)+'m';
+if(!localStorage.a) localStorage.a=Date.now();
 </script>
