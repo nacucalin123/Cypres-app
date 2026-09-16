@@ -49,15 +49,3 @@ r();setTimeout(gen,1000)
 <button class="btn" onclick="location.href='index.html'">⬅️ INAPOI LA HARTA</button>
 
 <script>
-function k(){return new Date().toISOString().slice(0,10)}
-let d=JSON.parse(localStorage.d||'{}'),c=d[k()]||{e:0,n:0};
-let h=(Date.now()-(+localStorage.a||Date.now()))/36e5||0.1;
-let brut=c.e, net=brut*0.8;
-document.getElementById('brut').textContent=brut.toFixed(1)+'€';
-document.getElementById('earn').textContent=net.toFixed(1)+'€';
-document.getElementById('com').textContent='-'+(brut*0.2).toFixed(1)+'€';
-document.getElementById('curs').textContent=c.n;
-document.getElementById('perh').textContent=(net/(h||0.1)).toFixed(1)+'€/h';
-document.getElementById('time').textContent=Math.floor(h)+'h '+Math.floor((h%1)*60)+'m';
-if(!localStorage.a) localStorage.a=Date.now();
-</script>
