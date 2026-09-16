@@ -1,51 +1,63 @@
-<!DOCTYPE html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CYPRES</title><style>#m{position:fixed;top:0;left:0;right:0;bottom:90px}body{margin:0;font-family:sans-serif}.b{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:10px;z-index:9;border-radius:14px 14px 0 0;box-shadow:0 -5px 20px #0003}.o{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px;z-index:20;display:none}.s{display:block!important}</style><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><div id="m"></div><div class="b"><b id="s">0€ brut 0€ net 0c 0€/h</b><div style="font-size:10px;color:#666">Net=Brut-20% | €/h=Net/ore</div><button onclick="gen()" style="width:100%;background:#000;color:#fff;padding:10px;border:0;border-radius:8px;margin-top:6px">🔔 COMANDA + SUNET</button></div><div class="o" id="o"><b id="p"></b> <span id="f"></span>→<span id="g"></span> <small id="d"></small><br><button onclick="acc()" style="width:100%;background:#00d26a;padding:10px;border:0;border-radius:8px;margin-top:6px">✅ ACCEPTA</button></div><script>
-m=L.map('m').setView([39.4699,-0.3763],14);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(m);let a=Date.now(),x,P;function b(){try{if(!x)x=new AudioContext();let o=x.createOscillator();o.connect(x.destination);o.frequency.value=900;o.start();setTimeout(()=>o.stop(),350)}catch(e){}navigator.vibrate&&navigator.vibrate([300])}
-function k(){return new Date().toISOString().slice(0,10)}function r(){let d=JSON.parse(localStorage.d||'{}'),c=k(),e=d[c]||{e:0,n:0},h=(Date.now()-a)/36e5||.01;s.textContent=e.e.toFixed(1)+'€ brut '+(e.e*.8).toFixed(1)+'€ net '+e.n+'c '+(e.e*.8/h).toFixed(1)+'€/h'}
-function gen(){let L=[['Benimaclet','Ruzafa',2.1],['Centro','Malvarrosa',4.2]];let l=L[Math.random()*2|0];P=+(5+Math.random()*6).toFixed(1);p.textContent=P+'€';f.textContent=l[0];g.textContent=l[1];d.textContent=l[2]+'km Net '+(P*.8).toFixed(1)+'€';o.classList.add('s');b()}
-function acc(){o.classList.remove('s');let c=k(),d=JSON.parse(localStorage.d||'{}');if(!d[c])d[c]={e:0,n:0};d[c].e+=P;d[c].n+=1;localStorage.d=JSON.stringify(d);r()}
-r();setTimeout(gen,1000)
-</script><!DOCTYPE html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profil Curier - UBER</title><style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,sans-serif;background:#f6f6f6;color:#000}
-.top{background:#000;color:#fff;padding:20px 16px 30px;border-radius:0 0 20px 20px}
-.row{display:flex;align-items:center;gap:14px}
-.ava{width:72px;height:72px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}
-.name{font-size:20px;font-weight:700}.rate{background:#fff;color:#000;padding:3px 8px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;gap:4px;margin-top:4px}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:-18px 16px}
-.card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 12px #0001}
-.card b{font-size:18px;display:block}.card span{font-size:11px;color:#666}
-.list{margin:0 16px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0001}
-.it{display:flex;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #eee;font-size:14px}
-.it:last-child{border:0}.it small{color:#666}
-.btn{margin:16px;background:#000;color:#fff;padding:14px;border:0;border-radius:10px;width:calc(100% - 32px);font-size:15px;font-weight:700}
-.badge{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;color:#fff}
-.g{background:#00d26a}.y{background:#ffb800}.b{background:#000}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;margin:0;background:#fff}
+.top{background:#fff;display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #ddd}
+.filters{background:#1E2A4A;padding:10px;display:flex;gap:8px;overflow:auto}
+.chip{background:#1E2A4A;color:white;border:1px solid white;border-radius:20px;padding:6px 12px;white-space:nowrap}
+.bono{background:#2ecc71;color:white;border-radius:20px;padding:6px 12px;display:inline-block;margin:10px}
+.card{border:1px solid #eee;margin:10px;border-radius:12px;padding:12px;box-shadow:0 2px 5px #ddd}
+.go{background:#1E2A4A;color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;float:right}
+.price{background:#2ecc71;color:white;border-radius:20px;padding:4px 10px}
+.km{background:#d6eaff;border-radius:20px;padding:4px 10px;margin-left:6px}
+.bottom{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;border-top:1px solid #ddd;padding:8px 0}
+.bottom div{text-align:center;font-size:12px;color:gray}
+.premium{background:#E8F5E9;border-left:4px solid green;padding:12px;margin:10px;border-radius:6px;color:#2E7D32}
+input{width:90%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;background:#f5f5f5}
 </style>
+</head>
+<body>
 
-<div class="top">
-<div class="row">
-<div class="ava">C</div>
-<div>
-<div class="name">Calin Nacu</div>
-<div class="rate">⭐ 4.96 • 1,248 curse</div>
+<div class="top"><b>catcher ✓✓</b><span style="color:red">●</span></div>
+<div class="filters">
+<div class="chip">0-1 km: 7€</div>
+<div class="chip">1-2 km: 8€</div>
+<div class="chip">2-3 km: 9€</div>
 </div>
-</div>
-</div>
+<div class="bono">💧 Bono por lluvia</div>
 
-<div class="grid">
-<div class="card"><b id="earn">0€</b><span>Net azi</span></div>
-<div class="card"><b id="perh">0€/h</b><span>€/oră</span></div>
-<div class="card"><b id="curs">0</b><span>Curse</span></div>
-</div>
-
-<div class="list">
-<div class="it"><span>💰 Brut azi</span><b id="brut">0€</b></div>
-<div class="it"><span>📉 Comision UBER 20%</span><small id="com">-0€</small></div>
-<div class="it"><span>✅ Rată acceptare</span><span><span class="badge g">98%</span></span></div>
-<div class="it"><span>⏱️ Timp online</span><b id="time">0h 0m</b></div>
-<div class="it"><span>🏆 Nivel</span><span><span class="badge b">DIAMANT</span></span></div>
-<div class="it"><span>📦 Tip cont</span><span><span class="badge y">UBER PRO</span></span></div>
+<div class="card">
+<div class="go">GO!</div>
+<b>PIZZERÍA CARLOS<br>VALENCIA I</b> - 23:48<br>
+a 2.77km de ti<br><br>
+<span class="price">🚴 5.92€</span><span class="km">4.99 km</span><br><br>
+<small>📦 Avinguda de José Roca Coll 30, PATRAIX, 46014 VALENCIA</small>
 </div>
 
-<button class="btn" onclick="location.href='index.html'">⬅️ INAPOI LA HARTA</button>
+<div class="card">
+<div class="go">GO!</div>
+<b>PIZZERÍA CARLOS<br>VALENCIA I</b> - 23:50<br>
+a 2.77km de ti<br><br>
+<span class="price">🚴 5.94€</span><span class="km">5.01 km</span>
+</div>
 
-<script>
+<div style="padding:10px">
+<h3>Mis datos</h3>
+Nombre:<br><input value="Călin Alexandru"><br>
+Apellido:<br><input value="Nacu"><br>
+Ciudad:<br><input value="Valencia"><br><br>
+<div style="background:#2E7D6F;height:120px;border-radius:12px;color:white;display:flex;align-items:center;justify-content:center">🛵 MAPA</div>
+</div>
+
+<div style="height:80px"></div>
+<div class="bottom">
+<div>🛍️<br>Anuncios</div>
+<div>🔥<br>Mis Capturas</div>
+<div>📚<br>Resumen</div>
+<div style="color:black;font-weight:bold">👤<br>Cuenta</div>
+</div>
+
+</body>
+</html>
