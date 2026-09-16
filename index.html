@@ -1,63 +1,45 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1a2744">
+<link rel="manifest" href="manifest.json">
+<title>Cypres Marketplace</title>
 <style>
-body{font-family:Arial;margin:0;background:#fff}
-.top{background:#fff;display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #ddd}
-.filters{background:#1E2A4A;padding:10px;display:flex;gap:8px;overflow:auto}
-.chip{background:#1E2A4A;color:white;border:1px solid white;border-radius:20px;padding:6px 12px;white-space:nowrap}
-.bono{background:#2ecc71;color:white;border-radius:20px;padding:6px 12px;display:inline-block;margin:10px}
-.card{border:1px solid #eee;margin:10px;border-radius:12px;padding:12px;box-shadow:0 2px 5px #ddd}
-.go{background:#1E2A4A;color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;float:right}
-.price{background:#2ecc71;color:white;border-radius:20px;padding:4px 10px}
-.km{background:#d6eaff;border-radius:20px;padding:4px 10px;margin-left:6px}
-.bottom{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;border-top:1px solid #ddd;padding:8px 0}
-.bottom div{text-align:center;font-size:12px;color:gray}
-.premium{background:#E8F5E9;border-left:4px solid green;padding:12px;margin:10px;border-radius:6px;color:#2E7D32}
-input{width:90%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;background:#f5f5f5}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f6f6f6;padding-bottom:85px}
+.head{background:white;display:flex;justify-content:space-between;align-items:center;padding:14px 12px;font-weight:900;font-size:17px;position:sticky;top:0;z-index:10;border-bottom:1px solid #eee}
+.logo{display:flex;align-items:center;gap:8px}.logo b{letter-spacing:1px}
+.filters{background:#1a2744;color:white;padding:10px;display:flex;gap:8px;overflow:auto}
+.chip{border:1.5px solid #ffffffaa;border-radius:22px;padding:7px 14px;white-space:nowrap;cursor:pointer;opacity:.7;font-size:14px}.chip.active{opacity:1;background:white;color:#1a2744;font-weight:bold}
+.bono{margin:12px;background:#27ae60;color:white;border-radius:22px;padding:8px 14px;display:inline-flex;gap:6px;align-items:center;font-weight:bold;font-size:14px}
+.card{background:white;margin:10px;border-radius:14px;padding:14px;box-shadow:0 3px 10px #0001;position:relative;min-height:110px}
+.go{background:#1a2744;color:white;width:68px;height:68px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;float:right;font-weight:900;cursor:pointer;line-height:1}
+.price{background:#27ae60;color:white;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:14px}
+.dist{background:#dbeafe;padding:6px 12px;border-radius:20px;margin-left:6px;font-size:14px}
+.bottom{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;border-top:1px solid #ddd;padding:10px 0;z-index:20}
+.bottom div{font-size:11px;text-align:center;color:#888;line-height:1.2}
+.bottom .active{color:#1a2744;font-weight:900}
+.config{background:white;margin:10px;border-radius:14px;padding:14px}
+.row{display:flex;align-items:center;gap:14px;margin:12px 0}
+.circle{width:38px;height:38px;border:2px solid #1a2744;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
 </style>
 </head>
 <body>
+<div class="head"><div class="logo">🟦 <b>CYPRES MARKETPLACE</b></div><span style="color:#27ae60;font-size:12px">● Conectado</span></div>
+<div class="filters" id="filters"></div>
+<div class="bono">💧 Bono por lluvia ACTIVO</div>
+<div id="list"></div>
 
-<div class="top"><b>catcher ✓✓</b><span style="color:red">●</span></div>
-<div class="filters">
-<div class="chip">0-1 km: 7€</div>
-<div class="chip">1-2 km: 8€</div>
-<div class="chip">2-3 km: 9€</div>
-</div>
-<div class="bono">💧 Bono por lluvia</div>
-
-<div class="card">
-<div class="go">GO!</div>
-<b>PIZZERÍA CARLOS<br>VALENCIA I</b> - 23:48<br>
-a 2.77km de ti<br><br>
-<span class="price">🚴 5.92€</span><span class="km">4.99 km</span><br><br>
-<small>📦 Avinguda de José Roca Coll 30, PATRAIX, 46014 VALENCIA</small>
+<div class="config">
+<p style="background:#e3f2fd;padding:12px;border-radius:8px;color:#1565c0;font-weight:bold;text-align:center">Configuración Cypres</p>
+<div id="settings"></div>
 </div>
 
-<div class="card">
-<div class="go">GO!</div>
-<b>PIZZERÍA CARLOS<br>VALENCIA I</b> - 23:50<br>
-a 2.77km de ti<br><br>
-<span class="price">🚴 5.94€</span><span class="km">5.01 km</span>
-</div>
-
-<div style="padding:10px">
-<h3>Mis datos</h3>
-Nombre:<br><input value="Călin Alexandru"><br>
-Apellido:<br><input value="Nacu"><br>
-Ciudad:<br><input value="Valencia"><br><br>
-<div style="background:#2E7D6F;height:120px;border-radius:12px;color:white;display:flex;align-items:center;justify-content:center">🛵 MAPA</div>
-</div>
-
-<div style="height:80px"></div>
 <div class="bottom">
-<div>🛍️<br>Anuncios</div>
-<div>🔥<br>Mis Capturas</div>
-<div>📚<br>Resumen</div>
-<div style="color:black;font-weight:bold">👤<br>Cuenta</div>
+<div onclick="location.href='index.html'" class="active">🏠<br>Marketplace</div><div>🔥<br>Mis Capturas</div><div>📊<br>Resumen</div><div onclick="location.href='profil.html'">👤<br>Cuenta</div>
 </div>
 
-</body>
-</html>
+<script>
+let cfg = JSON.parse(localStorage.getItem('cypres_cfg')||'{"0
